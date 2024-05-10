@@ -49,25 +49,18 @@ class ResidenceStorageBungeeMain : Plugin(), Listener {
             val serverName = input.readUTF()
 
             val serverInfo = ProxyServer.getInstance().getServerInfo(serverName)
-            proxiedPlayer.connect(serverInfo) { result: Boolean, error: Throwable ->
-                if (result) {
-                    ProxyServer.getInstance().scheduler.runAsync(instance) {
-                        Thread.sleep(1000)
-                        val byteArrayOutputStream = ByteArrayOutputStream()
-                        DataOutputStream(byteArrayOutputStream).use { out ->
-                            out.writeUTF("teleport")
-                            out.writeUTF(residenceName)
-                        }
-                        proxiedPlayer.server.sendData(pluginChannel, byteArrayOutputStream.toByteArray())
-                    }
+            proxiedPlayer.connect(serverInfo)
+            ProxyServer.getInstance().scheduler.runAsync(instance) {
+                Thread.sleep(1000)
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                DataOutputStream(byteArrayOutputStream).use { out ->
+                    out.writeUTF("teleport")
+                    out.writeUTF(residenceName)
                 }
+                proxiedPlayer.server.sendData(pluginChannel, byteArrayOutputStream.toByteArray())
             }
         }
     }
-
-
-
-
 
 
 }
