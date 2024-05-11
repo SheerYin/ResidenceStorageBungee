@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.concurrent.TimeUnit
 
 
 class ResidenceStorageBungeeMain : Plugin(), Listener {
@@ -50,15 +51,14 @@ class ResidenceStorageBungeeMain : Plugin(), Listener {
 
             val serverInfo = ProxyServer.getInstance().getServerInfo(serverName)
             proxiedPlayer.connect(serverInfo)
-            ProxyServer.getInstance().scheduler.runAsync(instance) {
-                Thread.sleep(1000)
+            ProxyServer.getInstance().scheduler.schedule(this, {
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 DataOutputStream(byteArrayOutputStream).use { out ->
                     out.writeUTF("teleport")
                     out.writeUTF(residenceName)
                 }
                 proxiedPlayer.server.sendData(pluginChannel, byteArrayOutputStream.toByteArray())
-            }
+            }, 1000, TimeUnit.MILLISECONDS)
         }
     }
 
