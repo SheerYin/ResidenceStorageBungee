@@ -2,6 +2,7 @@ package io.github.yin.residencestoragebungee
 
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.connection.Server
 import net.md_5.bungee.api.event.PluginMessageEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
@@ -35,7 +36,7 @@ class ResidenceStorageBungeeMain : Plugin(), Listener {
 
     @EventHandler(priority = 3)
     fun onPluginMessage(event: PluginMessageEvent) {
-        if (event.tag != pluginChannel) {
+        if (event.sender !is Server || event.tag != pluginChannel) {
             return
         }
 
